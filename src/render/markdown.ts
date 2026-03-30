@@ -1,5 +1,10 @@
 import MarkdownIt from 'markdown-it';
 import { resolve, dirname } from 'path';
+import mkMark from 'markdown-it-mark';
+import mkSup from 'markdown-it-sup';
+import mkSub from 'markdown-it-sub';
+import mkTaskLists from 'markdown-it-task-lists';
+import { renderMermaidSVG } from 'beautiful-mermaid';
 
 // 初始化 MarkdownIt 实例
 const md = new MarkdownIt({
@@ -7,6 +12,15 @@ const md = new MarkdownIt({
   breaks: false,    // 禁用回车即换行（保持原生 Mrakdown 段落逻辑）
   linkify: true,    // 自动将 URL 转为链接
   typographer: true // 启用排版替补（直引号变弯引号等）
+});
+
+md.use(mkMark);
+md.use(mkSup);
+md.use(mkSub);
+md.use(mkTaskLists, {
+  enabled: true,         // 将 [ ] 和 [x] 解析为 checkbox 列表标记
+  label: true,           // 为 checkbox 添加 label 关联以规避对齐排版断层
+  labelAfter: true       // label 在后侧
 });
 
 /**
@@ -38,6 +52,30 @@ export function parseMarkdown(content: string, mdFilePath: string): string {
     return defaultImageRenderer(tokens, idx, options, env, self);
   };
   
+  // Hook 拦截原生的代码块渲染逻辑，专门抓取 mermaid
+  const defaultFence = md.renderer.rules.fence || function (tokens, idx, options, env, self) {
+    return self.renderToken(tokens, idx, options);
+  };
+
+  md.renderer.rules.fence = function (tokens, idx, options, env, self) {
+    const token = tokens[idx];
+    if (token.info.trim() === 'mermaid') {
+      try {
+        // 利用服务端引擎高频秒切输出，并且传入 CSS Token 变量使之融于宿主背景色盘
+        const svg = renderMermaidSVG(token.content, { 
+          bg: 'var(--bg-color)', 
+          fg: 'var(--text-main)', 
+          transparent: true 
+        });
+        return `<figure class="mermaid-container">${svg}</figure>`;
+      } catch (e) {
+        console.warn(`[MD2POST] Failed to render mermaid diagram. Fallback to normal code block. Error: ${e}`);
+        // 报错则 fallback 到普通的黑底白字代码块显示法
+      }
+    }
+    return defaultFence(tokens, idx, options, env, self);
+  };
+
   const rawHtml = md.render(content);
   return rawHtml;
 }

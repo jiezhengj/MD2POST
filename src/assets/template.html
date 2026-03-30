@@ -223,6 +223,76 @@
             margin-bottom: var(--p-spacing);
         }
 
+        /* 拓展功能支持：高亮标记 (Highlight) */
+        mark {
+            background-color: rgba(255, 215, 0, 0.3); /* 柔和的高亮黄，暗黑或亮白色系通用 */
+            color: inherit;
+            padding: 0.1em 0.3em;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        /* 拓展功能支持：上下标 */
+        sup, sub {
+            font-size: 0.7em;
+            line-height: 0;
+            position: relative;
+            vertical-align: baseline;
+            color: var(--text-sub);
+        }
+        sup { top: -0.5em; }
+        sub { bottom: -0.25em; }
+
+        /* 拓展功能支持：任务列表 (Checklist) */
+        .task-list-item {
+            list-style-type: none; /* 原生去黑点 */
+            display: flex;
+            align-items: flex-start; /* 完美对齐文字流 */
+        }
+        .task-list-item-checkbox {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 1.25em;
+            height: 1.25em;
+            margin-top: 0.3em;
+            margin-right: 0.8em;
+            border: 2px solid var(--border-color);
+            background-color: var(--bg-color);
+            border-radius: 6px; /* 介于方圆之间，兼顾两者的美感 */
+            position: relative;
+            flex-shrink: 0;
+            display: inline-block;
+        }
+        .task-list-item-checkbox:checked {
+            background-color: var(--text-main);
+            border-color: var(--text-main);
+        }
+        .task-list-item-checkbox:checked::after {
+            content: '';
+            position: absolute;
+            left: 32%;
+            top: 15%;
+            width: 25%;
+            height: 45%;
+            border: solid var(--bg-color);
+            border-width: 0 3px 3px 0; /* 对冲勾形底部的像素毛边 */
+            transform: rotate(45deg);
+        }
+
+        /* 拓展功能支持：后端直出的 Beautiful-Mermaid 矢量容器 */
+        .mermaid-container {
+            width: 100%;
+            margin: var(--p-spacing) 0;
+            display: flex;
+            justify-content: center;
+        }
+        .mermaid-container svg {
+            width: 100%;
+            height: auto;
+            max-width: 100%; /* 防止越界 */
+            /* 字体天生使用继承放大 */
+        }
+
     </style>
 </head>
 <body>

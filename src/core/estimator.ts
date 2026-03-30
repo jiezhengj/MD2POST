@@ -3,12 +3,21 @@ import { resolve, dirname } from 'path';
 import { existsSync } from 'fs';
 import { createRequire } from 'module';
 import { TypographyConfig } from '../types.js';
+import mkMark from 'markdown-it-mark';
+import mkSup from 'markdown-it-sup';
+import mkSub from 'markdown-it-sub';
+import mkTaskLists from 'markdown-it-task-lists';
+import { renderMermaidSVG } from 'beautiful-mermaid';
 
 const require = createRequire(import.meta.url);
 const sizeOf = require('image-size');
 
 // 初始化独立的 md 实例用于探针解析 (无渲染开销)
 const md = new MarkdownIt();
+md.use(mkMark);
+md.use(mkSup);
+md.use(mkSub);
+md.use(mkTaskLists, { enabled: true, label: true, labelAfter: true });
 
 export interface EstimationResult {
   estimatedHeight: number;
@@ -84,6 +93,32 @@ export function estimateHeight(content: string, config: TypographyConfig, mdFile
     }
     if (token.type === 'hr') {
       totalHeight += 120; // 粗估上下 margin
+    }
+
+    if (token.type === 'fence' || token.type === 'code_block') {
+      const lines = token.content.split('\n').length;
+      if (token.info.trim() === 'mermaid') {
+        // 特殊估算：利用后端秒切生成，取出其 SVG header 中的 width 和 height
+        try {
+          const svgStr = renderMermaidSVG(token.content);
+          const wMatch = svgStr.match(/width="([\d.]+)"/);
+          const hMatch = svgStr.match(/height="([\d.]+)"/);
+          if (wMatch && hMatch) {
+            const originW = parseFloat(wMatch[1]);
+            const originH = parseFloat(hMatch[1]);
+            // 在长图排版中，.mermaid-container 会拉伸到 920px 或者自适应
+            // 若 originW < 920，它会保持或被轻微撑开，这里我们保守采用真实等比映射法
+            const scale = 920 / originW; 
+            // 加上上下间距预留
+            totalHeight += Math.floor(originH * scale) + 80;
+            continue;
+          }
+        } catch (e) {
+          // failed, fallback to code block rule
+        }
+      }
+      // 常规代码块：上下 40px padding + 每行约 24px + 横向滚动条预留
+      totalHeight += (lines * 24) + 80 + 20; 
     }
 
     // 文本内容遍历与行数推演

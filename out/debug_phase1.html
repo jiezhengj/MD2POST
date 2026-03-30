@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,7 +13,7 @@
             --border-color: #E9ECEF;
             
             /* 语言相关的基准字号 (中文 32px, 日文 30px, 英文 28px) */
-            --base-font-size: 28px;
+            --base-font-size: 32px;
             
             /* 行高基准 (统一 1.75) */
             --base-line-height: 1.75;
@@ -56,7 +56,7 @@
             color: var(--text-main);
             font-size: 1rem;
             line-height: var(--base-line-height);
-            letter-spacing: 0; 
+            letter-spacing: 0.05em; 
             -webkit-font-smoothing: antialiased;
             word-wrap: break-word;
             overflow-wrap: break-word;
@@ -223,284 +223,275 @@
             margin-bottom: var(--p-spacing);
         }
 
+        /* 拓展功能支持：高亮标记 (Highlight) */
+        mark {
+            background-color: rgba(255, 215, 0, 0.3); /* 柔和的高亮黄，暗黑或亮白色系通用 */
+            color: inherit;
+            padding: 0.1em 0.3em;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        /* 拓展功能支持：上下标 */
+        sup, sub {
+            font-size: 0.7em;
+            line-height: 0;
+            position: relative;
+            vertical-align: baseline;
+            color: var(--text-sub);
+        }
+        sup { top: -0.5em; }
+        sub { bottom: -0.25em; }
+
+        /* 拓展功能支持：任务列表 (Checklist) */
+        .task-list-item {
+            list-style-type: none; /* 原生去黑点 */
+            display: flex;
+            align-items: flex-start; /* 完美对齐文字流 */
+        }
+        .task-list-item-checkbox {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 1.25em;
+            height: 1.25em;
+            margin-top: 0.3em;
+            margin-right: 0.8em;
+            border: 2px solid var(--border-color);
+            background-color: var(--bg-color);
+            border-radius: 6px; /* 介于方圆之间，兼顾两者的美感 */
+            position: relative;
+            flex-shrink: 0;
+            display: inline-block;
+        }
+        .task-list-item-checkbox:checked {
+            background-color: var(--text-main);
+            border-color: var(--text-main);
+        }
+        .task-list-item-checkbox:checked::after {
+            content: '';
+            position: absolute;
+            left: 32%;
+            top: 15%;
+            width: 25%;
+            height: 45%;
+            border: solid var(--bg-color);
+            border-width: 0 3px 3px 0; /* 对冲勾形底部的像素毛边 */
+            transform: rotate(45deg);
+        }
+
+        /* 拓展功能支持：后端直出的 Beautiful-Mermaid 矢量容器 */
+        .mermaid-container {
+            width: 100%;
+            margin: var(--p-spacing) 0;
+            display: flex;
+            justify-content: center;
+        }
+        .mermaid-container svg {
+            width: 100%;
+            height: auto;
+            max-width: 100%; /* 防止越界 */
+            /* 字体天生使用继承放大 */
+        }
+
     </style>
 </head>
 <body>
     <div class="container">
         <!-- Markdown 转译的 HTML 将投递在此处 -->
-        <h1>MD2POST Huge Test Document</h1>
-<h2>Section 0</h2>
-<p>This is a test paragraph for section 0. It needs to be long enough to take up space. MD2POST should correctly cut this huge document into pieces without splitting the text right in the middle horizontally. Let us see if the Playwright bounding rect logic works beautifully and selects the gaps rather than the text!</p>
-<h2>Section 1</h2>
-<p>This is a test paragraph for section 1. It needs to be long enough to take up space…</p>
-<h2>Section 2</h2>
-<p>Let’s test line heights and multiple paragraphs.</p>
-<p>Here is another paragraph inside section 2 to create more DOM elements and test the spacing.</p>
-<h2>Section 3</h2>
-<p>MD2POST is an incredibly over-engineered tool that handles edge cases like you’ve never seen before.</p>
-<ol>
-<li>It handles lists!</li>
-<li>It handles bold texts!</li>
-</ol>
-<blockquote>
-<p>And it looks amazingly beautiful in blockquotes!</p>
-</blockquote>
-<h2>Section 4</h2>
-<p>We need a lot of these to reach the 8000px limit.
-Let’s add some large tables or code blocks.</p>
-<pre><code class="language-typescript">function test() {
-  console.log(&quot;This is a block of code, it has dark background.&quot;);
-  for(let i=0; i&lt;50; i++) {
-    console.log(i);
+        <h1>终极高阶排版示例：Mermaid + TaskLists + Highlights</h1>
+<p>这是一份展示 MD2POST 全部高级特性的示例文件，涵盖了 Mermaid 流程图、高亮标记、上下标、任务列表等富文本排版场景。</p>
+<h2>MD2POST 渲染流水线</h2>
+<p>整个渲染流水线分为五个阶段，每个阶段有明确的职责边界：</p>
+<figure class="mermaid-container"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1007.6185 350.89200000000005" width="1007.6185" height="350.89200000000005" style="--bg:var(--bg-color);--fg:var(--text-main)">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap');
+  text { font-family: 'Inter', system-ui, sans-serif; }
+  svg {
+    /* Derived from --bg and --fg (overridable via --line, --accent, etc.) */
+    --_text:          var(--fg);
+    --_text-sec:      var(--muted, color-mix(in srgb, var(--fg) 60%, var(--bg)));
+    --_text-muted:    var(--muted, color-mix(in srgb, var(--fg) 40%, var(--bg)));
+    --_text-faint:    color-mix(in srgb, var(--fg) 25%, var(--bg));
+    --_line:          var(--line, color-mix(in srgb, var(--fg) 50%, var(--bg)));
+    --_arrow:         var(--accent, color-mix(in srgb, var(--fg) 85%, var(--bg)));
+    --_node-fill:     var(--surface, color-mix(in srgb, var(--fg) 3%, var(--bg)));
+    --_node-stroke:   var(--border, color-mix(in srgb, var(--fg) 20%, var(--bg)));
+    --_group-fill:    var(--bg);
+    --_group-hdr:     color-mix(in srgb, var(--fg) 5%, var(--bg));
+    --_inner-stroke:  color-mix(in srgb, var(--fg) 12%, var(--bg));
+    --_key-badge:     color-mix(in srgb, var(--fg) 10%, var(--bg));
   }
-}
-</code></pre>
-<h2>Section 5</h2>
-<p>More paragraphs to fill up the height so we can trigger a slice point!</p>
-<hr>
-<p>A divider!</p>
-<h2>Section 6</h2>
-<p>Let’s just repeat this a lot.
-This is test line 1.
-This is test line 2.
-This is test line 3.
-This is test line 4.
-This is test line 5.
-This is test line 6.
-This is test line 7.
-This is test line 8.
-This is test line 9.
-This is test line 10.
-This is test line 11.
-This is test line 12.
-This is test line 13.
-This is test line 14.
-This is test line 15.</p>
-<h2>Section 7</h2>
-<p>Another big section.
-The slice should ideally happen at the H2! Let’s see if the logic works.</p>
-<h2>Section 8</h2>
-<p>Keep going.
-We must hit at least 15000px so it cuts into 2 images.
-The code above is 50 lines? No, it’s just a loop. Let’s make it a huge block.</p>
-<pre><code class="language-text">Huge block line
-Huge block line
-Huge block line
-Huge block line
-Huge block line
-Huge block line
-Huge block line
-Huge block line
-Huge block line
-Huge block line
-Huge block line
-Huge block line
-Huge block line
-Huge block line
-Huge block line
-Huge block line
-Huge block line
-Huge block line
-Huge block line
-Huge block line
-</code></pre>
-<h2>Section 9</h2>
-<p>This should definitively be on the second page if the slice logic cuts near 8000.
-We don’t know the exact pixel height yet.</p>
-<h2>Section 10</h2>
-<p>Testing again.
-Testing again.
-Testing again.
-Testing again.
-Testing again.</p>
-<h2>Section 11</h2>
-<p>Test.
-Test.
-Test.</p>
-<h2>Section 12</h2>
-<p>The end of the massive text stream! Let’s see how many PNGs are generated and where they are sliced!</p>
-<h1>MD2POST Huge Test Document</h1>
-<h2>Section 0</h2>
-<p>This is a test paragraph for section 0. It needs to be long enough to take up space. MD2POST should correctly cut this huge document into pieces without splitting the text right in the middle horizontally. Let us see if the Playwright bounding rect logic works beautifully and selects the gaps rather than the text!</p>
-<h2>Section 1</h2>
-<p>This is a test paragraph for section 1. It needs to be long enough to take up space…</p>
-<h2>Section 2</h2>
-<p>Let’s test line heights and multiple paragraphs.</p>
-<p>Here is another paragraph inside section 2 to create more DOM elements and test the spacing.</p>
-<h2>Section 3</h2>
-<p>MD2POST is an incredibly over-engineered tool that handles edge cases like you’ve never seen before.</p>
-<ol>
-<li>It handles lists!</li>
-<li>It handles bold texts!</li>
-</ol>
-<blockquote>
-<p>And it looks amazingly beautiful in blockquotes!</p>
-</blockquote>
-<h2>Section 4</h2>
-<p>We need a lot of these to reach the 8000px limit.
-Let’s add some large tables or code blocks.</p>
-<pre><code class="language-typescript">function test() {
-  console.log(&quot;This is a block of code, it has dark background.&quot;);
-  for(let i=0; i&lt;50; i++) {
-    console.log(i);
+</style>
+<defs>
+  <marker id="arrowhead" markerWidth="8" markerHeight="5" refX="7" refY="2.5" orient="auto">
+    <polygon points="0 0, 8 2.5, 0 5" fill="var(--_arrow)" stroke="var(--_arrow)" stroke-width="0.75" stroke-linejoin="round" />
+  </marker>
+  <marker id="arrowhead-start" markerWidth="8" markerHeight="5" refX="1" refY="2.5" orient="auto-start-reverse">
+    <polygon points="8 0, 0 2.5, 8 5" fill="var(--_arrow)" stroke="var(--_arrow)" stroke-width="0.75" stroke-linejoin="round" />
+  </marker>
+</defs>
+<polyline class="edge" data-from="A" data-to="B" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="132.99600000000004,76.90000000000003 132.996,124.90000000000003" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<g class="node" data-id="A" data-label="输入 Markdown 文件" data-shape="rectangle">
+  <rect x="48.66550000000004" y="40.00000000000003" width="168.661" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="132.99600000000004" y="58.45000000000003" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">输入 Markdown 文件</text>
+</g>
+<g class="node" data-id="B" data-label="Phase 1+2 容量预估" data-shape="diamond">
+  <polygon points="132.996,124.90000000000003 225.99200000000002,217.89600000000004 132.996,310.89200000000005 40,217.89600000000004" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="132.996" y="217.89600000000004" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Phase 1+2 容量预估</text>
+</g>
+<g class="node" data-id="B--" data-label="B--" data-shape="rectangle">
+  <rect x="245.3265" y="40.00000000000003" width="60" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="275.3265" y="58.45000000000003" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">B--</text>
+</g>
+<g class="node" data-id="D--" data-label="E[Phase 4 语义探针切分" data-shape="asymmetric">
+  <polygon points="345.3265,40 539.1815,40 539.1815,76.9 345.3265,76.9 333.3265,58.45" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="436.254" y="58.45" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">E[Phase 4 语义探针切分</text>
+</g>
+<g class="node" data-id="E--" data-label="F[Phase 5 Sharp 分片导出" data-shape="asymmetric">
+  <polygon points="579.1814999999999,40 782.6695,40 782.6695,76.9 579.1814999999999,76.9 567.1814999999999,58.45" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="674.9254999999999" y="58.45" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">F[Phase 5 Sharp 分片导出</text>
+</g>
+<g class="node" data-id="F--" data-label="G[输出 PNG 图组" data-shape="asymmetric">
+  <polygon points="822.6695,40 967.6185,40 967.6185,76.9 822.6695,76.9 810.6695,58.45" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="889.144" y="58.45" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">G[输出 PNG 图组</text>
+</g>
+</svg></figure><p>如上图所示，引擎在进入昂贵的浏览器渲染步骤之前，会先通过毫秒级的 AST 扫描做一次容量预判，将超限内容<strong>提前拦截</strong>，而不是等待漫长渲染后才失败。</p>
+<h2>状态机示意</h2>
+<figure class="mermaid-container"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 478.9368333333333 484.2" width="478.9368333333333" height="484.2" style="--bg:var(--bg-color);--fg:var(--text-main)">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap');
+  text { font-family: 'Inter', system-ui, sans-serif; }
+  svg {
+    /* Derived from --bg and --fg (overridable via --line, --accent, etc.) */
+    --_text:          var(--fg);
+    --_text-sec:      var(--muted, color-mix(in srgb, var(--fg) 60%, var(--bg)));
+    --_text-muted:    var(--muted, color-mix(in srgb, var(--fg) 40%, var(--bg)));
+    --_text-faint:    color-mix(in srgb, var(--fg) 25%, var(--bg));
+    --_line:          var(--line, color-mix(in srgb, var(--fg) 50%, var(--bg)));
+    --_arrow:         var(--accent, color-mix(in srgb, var(--fg) 85%, var(--bg)));
+    --_node-fill:     var(--surface, color-mix(in srgb, var(--fg) 3%, var(--bg)));
+    --_node-stroke:   var(--border, color-mix(in srgb, var(--fg) 20%, var(--bg)));
+    --_group-fill:    var(--bg);
+    --_group-hdr:     color-mix(in srgb, var(--fg) 5%, var(--bg));
+    --_inner-stroke:  color-mix(in srgb, var(--fg) 12%, var(--bg));
+    --_key-badge:     color-mix(in srgb, var(--fg) 10%, var(--bg));
   }
-}
-</code></pre>
-<h2>Section 5</h2>
-<p>More paragraphs to fill up the height so we can trigger a slice point!</p>
-<hr>
-<p>A divider!</p>
-<h2>Section 6</h2>
-<p>Let’s just repeat this a lot.
-This is test line 1.
-This is test line 2.
-This is test line 3.
-This is test line 4.
-This is test line 5.
-This is test line 6.
-This is test line 7.
-This is test line 8.
-This is test line 9.
-This is test line 10.
-This is test line 11.
-This is test line 12.
-This is test line 13.
-This is test line 14.
-This is test line 15.</p>
-<h2>Section 7</h2>
-<p>Another big section.
-The slice should ideally happen at the H2! Let’s see if the logic works.</p>
-<h2>Section 8</h2>
-<p>Keep going.
-We must hit at least 15000px so it cuts into 2 images.
-The code above is 50 lines? No, it’s just a loop. Let’s make it a huge block.</p>
-<pre><code class="language-text">Huge block line
-Huge block line
-Huge block line
-Huge block line
-Huge block line
-Huge block line
-Huge block line
-Huge block line
-Huge block line
-Huge block line
-Huge block line
-Huge block line
-Huge block line
-Huge block line
-Huge block line
-Huge block line
-Huge block line
-Huge block line
-Huge block line
-Huge block line
-</code></pre>
-<h2>Section 9</h2>
-<p>This should definitively be on the second page if the slice logic cuts near 8000.
-We don’t know the exact pixel height yet.</p>
-<h2>Section 10</h2>
-<p>Testing again.
-Testing again.
-Testing again.
-Testing again.
-Testing again.</p>
-<h2>Section 11</h2>
-<p>Test.
-Test.
-Test.</p>
-<h2>Section 12</h2>
-<p>The end of the massive text stream! Let’s see how many PNGs are generated and where they are sliced!</p>
-<h1>MD2POST Huge Test Document</h1>
-<h2>Section 0</h2>
-<p>This is a test paragraph for section 0. It needs to be long enough to take up space. MD2POST should correctly cut this huge document into pieces without splitting the text right in the middle horizontally. Let us see if the Playwright bounding rect logic works beautifully and selects the gaps rather than the text!</p>
-<h2>Section 1</h2>
-<p>This is a test paragraph for section 1. It needs to be long enough to take up space…</p>
-<h2>Section 2</h2>
-<p>Let’s test line heights and multiple paragraphs.</p>
-<p>Here is another paragraph inside section 2 to create more DOM elements and test the spacing.</p>
-<h2>Section 3</h2>
-<p>MD2POST is an incredibly over-engineered tool that handles edge cases like you’ve never seen before.</p>
-<ol>
-<li>It handles lists!</li>
-<li>It handles bold texts!</li>
-</ol>
+</style>
+<defs>
+  <marker id="arrowhead" markerWidth="8" markerHeight="5" refX="7" refY="2.5" orient="auto">
+    <polygon points="0 0, 8 2.5, 0 5" fill="var(--_arrow)" stroke="var(--_arrow)" stroke-width="0.75" stroke-linejoin="round" />
+  </marker>
+  <marker id="arrowhead-start" markerWidth="8" markerHeight="5" refX="1" refY="2.5" orient="auto-start-reverse">
+    <polygon points="8 0, 0 2.5, 8 5" fill="var(--_arrow)" stroke="var(--_arrow)" stroke-width="0.75" stroke-linejoin="round" />
+  </marker>
+</defs>
+<polyline class="edge" data-from="_start" data-to="空闲" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="103.5,362.40000000000003 103.5,389.30000000000007 149.8075,389.30000000000007 149.8075,407.3" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="空闲" data-to="解析中" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="收到 .md 文件" points="128.33049999999997,407.3 128.33049999999997,395.3 78.5,395.3 78.5,251 122.9058333333333,251 122.9058333333333,206.10000000000002" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="解析中" data-to="预估熔断" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="内容超限" points="151.70916666666665,206.10000000000002 151.70916666666665,242.10000000000002 196.11499999999998,242.10000000000002 196.115,334.40000000000003" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="解析中" data-to="渲染中" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="内容合规" points="137.30749999999998,169.2 137.30749999999995,88.9 267.00333333333333,88.9 267.00333333333333,76.9" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="渲染中" data-to="切分中" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="高度 &gt; 8000px" points="288.6058333333333,76.9 288.6058333333333,237.5" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="渲染中" data-to="导出中" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="高度 ≤ 8000px" points="310.2083333333333,76.9 310.2083333333333,157.2 379.1598333333333,157.2 379.1598333333333,334.40000000000003 348.2845,334.40000000000003 348.2845,334.40000000000003" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="切分中" data-to="导出中" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="288.6058333333333,274.40000000000003 288.6058333333333,334.40000000000003 319.48116666666664,334.40000000000003 319.48116666666664,334.40000000000003" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="导出中" data-to="空闲" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="333.8828333333333,371.30000000000007 333.8828333333333,389.30000000000007 149.8075,389.30000000000007 149.8075,407.3" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="预估熔断" data-to="空闲" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="196.115,371.30000000000007 196.115,389.30000000000007 149.8075,389.30000000000007 149.8075,407.3" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<g class="edge-label" data-from="空闲" data-to="解析中" data-label="收到 .md 文件">
+  <rect x="36" y="258" width="84.178" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="78.089" y="273.15" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">收到 .md 文件</text>
+</g>
+<g class="edge-label" data-from="解析中" data-to="预估熔断" data-label="内容超限">
+  <rect x="163.11499999999998" y="249.1" width="65.17" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="195.7" y="264.25" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">内容超限</text>
+</g>
+<g class="edge-label" data-from="解析中" data-to="渲染中" data-label="内容合规">
+  <rect x="104.30749999999995" y="95.9" width="65.17" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="136.89249999999996" y="111.05000000000001" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">内容合规</text>
+</g>
+<g class="edge-label" data-from="渲染中" data-to="切分中" data-label="高度 &gt; 8000px">
+  <rect x="245.1058333333333" y="164.2" width="86.554" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="288.3828333333333" y="179.35" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">高度 &gt; 8000px</text>
+</g>
+<g class="edge-label" data-from="渲染中" data-to="导出中" data-label="高度 ≤ 8000px">
+  <rect x="335.6598333333333" y="164.2" width="86.554" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="378.9368333333333" y="179.35" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">高度 ≤ 8000px</text>
+</g>
+<g class="node" data-id="_start" data-label="" data-shape="state-start">
+  <circle cx="103.5" cy="348.40000000000003" r="12" fill="var(--_text)" stroke="none" />
+</g>
+<g class="node" data-id="空闲" data-label="空闲" data-shape="rounded">
+  <rect x="114.01249999999999" y="407.3" width="71.59" height="36.900000000000006" rx="6" ry="6" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="149.8075" y="425.75" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">空闲</text>
+</g>
+<g class="node" data-id="解析中" data-label="解析中" data-shape="rounded">
+  <rect x="94.10249999999996" y="169.2" width="86.41" height="36.900000000000006" rx="6" ry="6" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="137.30749999999995" y="187.64999999999998" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">解析中</text>
+</g>
+<g class="node" data-id="预估熔断" data-label="预估熔断" data-shape="rounded">
+  <rect x="145.5" y="334.40000000000003" width="101.22999999999999" height="36.900000000000006" rx="6" ry="6" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="196.115" y="352.85" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">预估熔断</text>
+</g>
+<g class="node" data-id="渲染中" data-label="渲染中" data-shape="rounded">
+  <rect x="245.4008333333333" y="40" width="86.41" height="36.900000000000006" rx="6" ry="6" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="288.6058333333333" y="58.45" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">渲染中</text>
+</g>
+<g class="node" data-id="切分中" data-label="切分中" data-shape="rounded">
+  <rect x="245.4008333333333" y="237.5" width="86.41" height="36.900000000000006" rx="6" ry="6" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="288.6058333333333" y="255.95" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">切分中</text>
+</g>
+<g class="node" data-id="导出中" data-label="导出中" data-shape="rounded">
+  <rect x="290.6778333333333" y="334.40000000000003" width="86.41" height="36.900000000000006" rx="6" ry="6" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="333.8828333333333" y="352.85" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">导出中</text>
+</g>
+</svg></figure><h2>支持的高级格式</h2>
+<h3>高亮与上下标</h3>
+<p>这里有 <mark>最高频使用的高亮底色</mark>，让关键信息一眼被锁定。化学式如 H<sub>2</sub>O 和数学幂次如 10<sup>2</sup> 均可精准对齐。</p>
+<h3>任务列表</h3>
+<ul class="contains-task-list">
+<li class="task-list-item enabled"><input class="task-list-item-checkbox" checked=""type="checkbox" id="task-item-1744144"><label class="task-list-item-label" for="task-item-1744144"> Phase 1：AST 解析与高度预估熔断</label></li>
+<li class="task-list-item enabled"><input class="task-list-item-checkbox" checked=""type="checkbox" id="task-item-4117355"><label class="task-list-item-label" for="task-item-4117355"> Phase 2：HTML 模板注入（含 CSS Design Tokens）</label></li>
+<li class="task-list-item enabled"><input class="task-list-item-checkbox" checked=""type="checkbox" id="task-item-4050947"><label class="task-list-item-label" for="task-item-4050947"> Phase 3：Playwright 无头渲染与精确高度测量</label></li>
+<li class="task-list-item enabled"><input class="task-list-item-checkbox" checked=""type="checkbox" id="task-item-9247132"><label class="task-list-item-label" for="task-item-9247132"> Phase 4：DOM 坐标探针与语义切分算法</label></li>
+<li class="task-list-item enabled"><input class="task-list-item-checkbox" checked=""type="checkbox" id="task-item-9156696"><label class="task-list-item-label" for="task-item-9156696"> Phase 5：Sharp 高精度分片 PNG 导出</label></li>
+<li class="task-list-item enabled"><input class="task-list-item-checkbox"type="checkbox" id="task-item-9989865"><label class="task-list-item-label" for="task-item-9989865"> 补充更多边缘案例的集成测试</label></li>
+<li class="task-list-item enabled"><input class="task-list-item-checkbox"type="checkbox" id="task-item-925546"><label class="task-list-item-label" for="task-item-925546"> 探索 Linux / Windows 跨平台兼容性</label></li>
+</ul>
+<h3>斜体与加粗</h3>
+<p>支持 <strong>加粗文本</strong>、<em>斜体文本</em>、<strong><em>加粗斜体</em></strong>，以及 <s>删除线</s> 等标准内联格式。</p>
+<h3>引用块</h3>
 <blockquote>
-<p>And it looks amazingly beautiful in blockquotes!</p>
+<p>这是一段引用。MD2POST 的设计理念是&quot;大模型负责内容决策，引擎负责确定性的物理排版执行&quot;。
+两者之间有清晰的职责边界，互不越权。</p>
 </blockquote>
-<h2>Section 4</h2>
-<p>We need a lot of these to reach the 8000px limit.
-Let’s add some large tables or code blocks.</p>
-<pre><code class="language-typescript">function test() {
-  console.log(&quot;This is a block of code, it has dark background.&quot;);
-  for(let i=0; i&lt;50; i++) {
-    console.log(i);
-  }
-}
+<h3>代码块</h3>
+<pre><code class="language-typescript">// 调用 MD2POST 只需一行命令
+npx tsx src/index.ts -i ./your_article.md -t tech -l zh
 </code></pre>
-<h2>Section 5</h2>
-<p>More paragraphs to fill up the height so we can trigger a slice point!</p>
-<hr>
-<p>A divider!</p>
-<h2>Section 6</h2>
-<p>Let’s just repeat this a lot.
-This is test line 1.
-This is test line 2.
-This is test line 3.
-This is test line 4.
-This is test line 5.
-This is test line 6.
-This is test line 7.
-This is test line 8.
-This is test line 9.
-This is test line 10.
-This is test line 11.
-This is test line 12.
-This is test line 13.
-This is test line 14.
-This is test line 15.</p>
-<h2>Section 7</h2>
-<p>Another big section.
-The slice should ideally happen at the H2! Let’s see if the logic works.</p>
-<h2>Section 8</h2>
-<p>Keep going.
-We must hit at least 15000px so it cuts into 2 images.
-The code above is 50 lines? No, it’s just a loop. Let’s make it a huge block.</p>
-<pre><code class="language-text">Huge block line
-Huge block line
-Huge block line
-Huge block line
-Huge block line
-Huge block line
-Huge block line
-Huge block line
-Huge block line
-Huge block line
-Huge block line
-Huge block line
-Huge block line
-Huge block line
-Huge block line
-Huge block line
-Huge block line
-Huge block line
-Huge block line
-Huge block line
-</code></pre>
-<h2>Section 9</h2>
-<p>This should definitively be on the second page if the slice logic cuts near 8000.
-We don’t know the exact pixel height yet.</p>
-<h2>Section 10</h2>
-<p>Testing again.
-Testing again.
-Testing again.
-Testing again.
-Testing again.</p>
-<h2>Section 11</h2>
-<p>Test.
-Test.
-Test.</p>
-<h2>Section 12</h2>
-<p>The end of the massive text stream! Let’s see how many PNGs are generated and where they are sliced!</p>
+<h3>表格</h3>
+<table>
+<thead>
+<tr>
+<th>主题参数</th>
+<th>描述</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tech</code></td>
+<td>冷白底色 + 蓝紫系高亮</td>
+<td>技术分享、产品分析</td>
+</tr>
+<tr>
+<td><code>humanities</code></td>
+<td>奶油暖白 + 赭红系点缀</td>
+<td>书评、随笔、人文内容</td>
+</tr>
+<tr>
+<td><code>emotion</code></td>
+<td>深色底色 + 金色高亮</td>
+<td>感悟、诗歌、情绪化内容</td>
+</tr>
+</tbody>
+</table>
 
     </div>
 </body>

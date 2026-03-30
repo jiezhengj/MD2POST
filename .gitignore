@@ -1,0 +1,17 @@
+node_modules/
+out/
+dist/
+
+# 测试产物
+test_m.svg
+test_m.ts
+huge.md
+medium.md
+test_advance.md
+
+# macOS 系统文件
+.DS_Store
+
+# 编辑器
+.vscode/
+.idea/
