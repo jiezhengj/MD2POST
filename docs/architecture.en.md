@@ -1,4 +1,4 @@
-> Language / 言語: **English** | [中文](./技术架构方案.md) | [日本語](./architecture.ja.md)
+> Language / 言語: **English** | [中文](./architecture.zh.md) | [日本語](./architecture.ja.md)
 
 # MD2POST: Technical Architecture
 

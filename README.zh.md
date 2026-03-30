@@ -80,7 +80,7 @@ npx tsx src/index.ts -i ./example.md -t tech -l zh
 
 项目中包含一份 [示例文件](./example.md)，涵盖了 Mermaid 流程图、任务列表、高亮、表格等全部高级语法，可用于直接验证引擎效果。
 
-完整参数说明请参阅 **[SKILL.md](./SKILL.md)**（Agent 专用接口文档）。
+完整参数说明请参阅 **[SKILL.zh.md](./SKILL.zh.md)**（Agent 专用接口文档）。
 
 ### 3. 查看输出
 
@@ -92,9 +92,9 @@ npx tsx src/index.ts -i ./example.md -t tech -l zh
 
 | 文档 | 目标读者 | 说明 |
 |------|---------|------|
-| **[SKILL.md](./SKILL.md)** | AI Agent | 完整调用接口说明、参数表、错误处理、集成建议 |
-| **[长图排版最佳实践](./docs/长图排版最佳实践.md)** | 开发者 / Agent | 定义字号、配色、切分策略等排版铁律 |
-| **[技术架构方案](./docs/技术架构方案.md)** | 开发者 | 渲染流水线、熔断机制、语义切分算法的技术说明 |
+| **[SKILL.zh.md](./SKILL.zh.md)** | AI Agent | 完整调用接口说明、参数表、错误处理、集成建议 |
+| **[长图排版最佳实践](./docs/best-practices.zh.md)** | 开发者 / Agent | 定义字号、配色、切分策略等排版铁律 |
+| **[技术架构方案](./docs/architecture.zh.md)** | 开发者 | 渲染流水线、熔断机制、语义切分算法的技术说明 |
 
 ---
 
