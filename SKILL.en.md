@@ -2,7 +2,7 @@
 
 ---
 name: md2post
-description: Enterprise-grade Markdown to Long Image Rendering Engine. Given a Markdown file, automatically completes the full pipeline of "semantic slicing → headless browser precise rasterization → segmented PNG export", outputting high-definition long images conforming to size constraints for X/Twitter, Weibo, and similar platforms.
+description: Personal-grade Markdown to Long Image Rendering Engine. Given a Markdown file, automatically completes the full pipeline of "semantic slicing → headless browser precise rasterization → segmented PNG export", outputting high-definition long images conforming to size constraints for X/Twitter, Weibo, and similar platforms.
 ---
 
 # MD2POST — Skill Reference (For AI Agents)

@@ -14,7 +14,7 @@ const program = new Command();
 
 program
   .name('md2post')
-  .description('Enterprise-grade Markdown to Long Image Renderer (Agent Skill / CLI)')
+  .description('Personal-grade Markdown to Long Image Renderer (Agent Skill / CLI)')
   .requiredOption('-i, --input <file>', 'Input Markdown file path')
   .option('-o, --output <dir>', 'Output directory', './out')
   .option('-t, --theme <theme>', 'Visual theme (tech | humanities | emotion)', 'humanities')
