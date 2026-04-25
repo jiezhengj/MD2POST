@@ -3,7 +3,7 @@
 # MD2POST: Technical Architecture
 
 > Status: In Development
-> Last Updated: 2026-03-29
+> Last Updated: 2026-04-26
 > Related Document: [Typography Best Practices](./best-practices.en.md)
 
 ---
@@ -64,7 +64,7 @@ The system's core workflow is divided into two phases: "Pre-processing (Brain)" 
    - **First-level fuse**: If total estimate exceeds 24000px, issue a capacity warning. If it exceeds 32000px, immediately fuse (`CAPACITY_EXCEEDED` error).
 2. **HTML/CSS Assembly and Vector Mounting**:
    - Convert Markdown to HTML DOM. At this stage, four official plugins are loaded — `markdown-it-mark`, `markdown-it-sup`, `markdown-it-sub`, `markdown-it-task-lists` — enabling the engine to support advanced typesetting syntax including highlights, super/subscripts, and Checklist native states.
-   - **Mermaid-specific intercept**: The engine uses `markdown-it`'s native `.renderer.rules.fence` rewrite algorithm. When a code block with `info === 'mermaid'` is detected, instead of pushing it into a dark code container, `beautiful-mermaid` is called on-the-spot to compile a high-precision SVG vector image string with no rendering wait, which is seamlessly inserted into the DOM.
+   - **Mermaid-specific intercept**: The engine uses `markdown-it`'s native `.renderer.rules.fence` rewrite algorithm. When a code block with `info === 'mermaid'` is detected, instead of pushing it into a dark code container, the local fork of `beautiful-mermaid` (located at `vendor/beautiful-mermaid/`) is called on-the-spot to compile a high-precision SVG vector image string with no rendering wait, which is seamlessly inserted into the DOM. This fork includes a **built-in ELK layout engine configuration** that forces flowchart vertical layout (TD/TB), completely fixing Issue #83 where TD/TB directives were ignored. `beautiful-mermaid` must be compiled with `npm run build:mermaid` before first use.
    - Inject CSS template containing Design Tokens, converting the Agent's output theme into `:root` variables (CSS Variables). The generated Mermaid SVG also naturally inherits the theme's color quality via `color-mix`-based variables (such as `bg` and `fg`).
    - CSS internally integrates visual design presets for all advanced features above (e.g., rounded checkboxes, precision-aligned superscripts, forced full-width SVG expansion algorithm).
 
