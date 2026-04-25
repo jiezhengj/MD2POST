@@ -74,7 +74,7 @@ npx playwright install chromium
 
 ### 1.1 Vendor ビルド (beautiful-mermaid fork)
 
-本プロジェクトには Issue #83 修正（TD/TB レイアウト反転バグ）を含む `beautiful-mermaid` ローカルフォークが含まれます。クローン後に追加ビルドが必要です：
+本プロジェクトには [Issue #83](https://github.com/lukilabs/beautiful-mermaid/issues/83) 修正（TD/TB レイアウト反転バグ）を含む `beautiful-mermaid` ローカルフォークが含まれます。クローン後に追加ビルドが必要です：
 
 ```bash
 cd vendor/beautiful-mermaid

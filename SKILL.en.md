@@ -62,7 +62,7 @@ If parameter documentation is printed, the environment is ready.
 
 ### Step 4: Build Vendor Module (beautiful-mermaid fork)
 
-This project includes a local fork of `beautiful-mermaid` with Issue #83 fix ( TD/TB layout flipping bug). Build it:
+This project includes a local fork of `beautiful-mermaid` with [Issue #83](https://github.com/lukilabs/beautiful-mermaid/issues/83) fix ( TD/TB layout flipping bug). Build it:
 
 ```bash
 cd vendor/beautiful-mermaid

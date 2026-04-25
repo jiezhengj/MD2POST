@@ -74,7 +74,7 @@ npx playwright install chromium
 
 ### 1.1 Vendor 构建 (beautiful-mermaid fork)
 
-本项目包含一个带 Issue #83 修复 (TD/TB 布局翻转 bug) 的 `beautiful-mermaid` 本地 fork。克隆后需要额外构建：
+本项目包含一个带 [Issue #83](https://github.com/lukilabs/beautiful-mermaid/issues/83) 修复 (TD/TB 布局翻转 bug) 的 `beautiful-mermaid` 本地 fork。克隆后需要额外构建：
 
 ```bash
 cd vendor/beautiful-mermaid

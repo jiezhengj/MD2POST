@@ -62,7 +62,7 @@ npx tsx src/index.ts --help
 
 ### ステップ 4：Vendor モジュールのビルド (beautiful-mermaid fork)
 
-本プロジェクトには Issue #83 修正（TD/TB レイアウト反転バグ）を含む `beautiful-mermaid` ローカルフォークが含まれています。ビルドが必要です：
+本プロジェクトには [Issue #83](https://github.com/lukilabs/beautiful-mermaid/issues/83) 修正（TD/TB レイアウト反転バグ）を含む `beautiful-mermaid` ローカルフォークが含まれています。ビルドが必要です：
 
 ```bash
 cd vendor/beautiful-mermaid

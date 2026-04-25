@@ -74,7 +74,7 @@ npx playwright install chromium
 
 ### 1.1 Vendor Build (beautiful-mermaid fork)
 
-This project includes a local fork of `beautiful-mermaid` with Issue #83 fix ( TD/TB layout flipping bug). After cloning:
+This project includes a local fork of `beautiful-mermaid` with [Issue #83](https://github.com/lukilabs/beautiful-mermaid/issues/83) fix ( TD/TB layout flipping bug). After cloning:
 
 ```bash
 cd vendor/beautiful-mermaid
