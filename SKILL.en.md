@@ -60,6 +60,17 @@ npx tsx src/index.ts --help
 
 If parameter documentation is printed, the environment is ready.
 
+### Step 4: Build Vendor Module (beautiful-mermaid fork)
+
+This project includes a local fork of `beautiful-mermaid` with Issue #83 fix ( TD/TB layout flipping bug). Build it:
+
+```bash
+cd vendor/beautiful-mermaid
+npm install
+npm run build
+cd ../..
+```
+
 ---
 
 ## IV. CLI Interface

@@ -25,3 +25,18 @@ npm-debug.log*
 # Cache
 .cache/
 .parcel-cache/
+
+# Test outputs
+test-*/
+out/
+
+# Vendor (beautiful-mermaid fork with Issue #83 fix)
+vendor/beautiful-mermaid/node_modules/
+vendor/beautiful-mermaid/.git/
+vendor/beautiful-mermaid/*.log
+vendor/beautiful-mermaid/bench.ts
+vendor/beautiful-mermaid/dev.ts
+vendor/beautiful-mermaid/xychart-*
+vendor/beautiful-mermaid/wrangler.toml
+vendor/beautiful-mermaid/hero.png
+vendor/beautiful-mermaid/.github/

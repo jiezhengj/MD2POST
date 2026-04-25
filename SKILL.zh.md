@@ -60,6 +60,17 @@ npx tsx src/index.ts --help
 
 如果输出了参数说明，说明环境就绪。
 
+### 步骤 4：构建 Vendor 模块 (beautiful-mermaid fork)
+
+本项目包含一个带 Issue #83 修复 (TD/TB 布局翻转 bug) 的 `beautiful-mermaid` 本地 fork，需要构建：
+
+```bash
+cd vendor/beautiful-mermaid
+npm install
+npm run build
+cd ../..
+```
+
 ---
 
 ## 四、CLI 调用接口
