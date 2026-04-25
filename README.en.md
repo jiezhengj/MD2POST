@@ -2,7 +2,7 @@
 
 # MD2POST
 
-**Personal-grade Markdown to Long Image Rendering Engine · Agent Skill**
+**Lightweight Markdown to Long Image Rendering Engine · Agent Skill**
 
 > This project is in an early validation stage and has not been fully tested. Community testing, improvement, and adaptation to your own use cases are welcome.
 

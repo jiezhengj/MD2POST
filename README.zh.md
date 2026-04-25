@@ -2,7 +2,7 @@
 
 # MD2POST
 
-**个人级 Markdown 转长图渲染引擎 · Agent Skill**
+**轻量级 Markdown 转长图渲染引擎 · Agent Skill**
 
 > 本项目处于早期验证阶段，尚未经过充分测试。欢迎社区继续测试、改进，并按自己的需求修改使用。
 

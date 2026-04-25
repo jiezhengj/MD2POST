@@ -1,7 +1,7 @@
 {
   "name": "md2post",
   "version": "1.0.0",
-  "description": "Personal-grade Markdown to Long Image Renderer (Agent Skill)",
+  "description": "Lightweight Markdown to Long Image Renderer (Agent Skill)",
   "main": "dist/index.js",
   "type": "module",
   "scripts": {

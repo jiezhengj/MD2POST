@@ -2,7 +2,7 @@
 
 ---
 name: md2post
-description: 个人级 Markdown 转长图渲染引擎。给定一份 Markdown 文件，自动完成"语义切分 → 无头浏览器精确光栅化 → 分片 PNG 导出"全流程，输出符合 X/Twitter、微博等平台尺寸约束的高清长图。
+description: 轻量级 Markdown 转长图渲染引擎。给定一份 Markdown 文件，自动完成"语义切分 → 无头浏览器精确光栅化 → 分片 PNG 导出"全流程，输出符合 X/Twitter、微博等平台尺寸约束的高清长图。
 ---
 
 # MD2POST — Skill 使用说明（Agent 专用）
