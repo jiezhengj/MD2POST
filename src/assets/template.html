@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="{{LANG}}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MD2POST Render Output</title>
+    <style>
+        :root {
+            /* 动态注入的主题 Tokens (由 Agent 输出的类型决定) */
+            --bg-color: {{BG_COLOR}};
+            --text-main: {{TEXT_MAIN}};
+            --text-sub: {{TEXT_SUB}};
+            --border-color: {{BORDER_COLOR}};
+            
+            /* 语言相关的基准字号 (中文 32px, 日文 30px, 英文 28px) */
+            --base-font-size: {{BASE_FONT_SIZE}}px;
+            
+            /* 行高基准 (统一 1.75) */
+            --base-line-height: 1.75;
+            
+            /* 核心布局参数 (保持绝对稳定以确保图片宽度 1080px 不变) */
+            --canvas-width: 1080px;
+            --content-width: 920px; /* 1080 - 80*2 */
+            --margin-top: 108px;
+            --margin-bottom: 88px;
+            
+            /* 段落间隙计算 */
+            --p-spacing: calc(var(--base-line-height) * 1rem); /* 即 56px 等效 */
+        }
+
+        /* 字体支持网络字体（如系统字体回退方案） */
+        body {
+            font-family: "Noto Sans CJK SC", "Noto Sans SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+        }
+        html[lang="ja"] body {
+            font-family: "Noto Sans CJK JP", "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+        }
+        html[lang="en"] body {
+            font-family: "Noto Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            /* 设定 html 的字号基准供 rem 使用 */
+            font-size: var(--base-font-size);
+        }
+
+        body {
+            width: var(--canvas-width);
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-size: 1rem;
+            line-height: var(--base-line-height);
+            letter-spacing: {{LETTER_SPACING}}; 
+            -webkit-font-smoothing: antialiased;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            /* CJK 禁则折行设定 */
+            word-break: normal;
+        }
+
+        .container {
+            width: var(--content-width);
+            margin: 0 auto;
+            padding-top: var(--margin-top);
+            padding-bottom: var(--margin-bottom);
+        }
+
+        /* 图像处理 */
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: calc(var(--p-spacing) * 1.5) auto;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* 淡淡的一层质感阴影 */
+        }
+
+        /* Typography - 标题体系 (基于 Modular Scale, 以 rem 等比推导, 均遵守排版最佳实践) */
+        h1, h2, h3, h4, h5, h6 {
+            color: var(--text-main);
+            font-weight: 700;
+        }
+
+        /* H1: ~72px, 行高 1.25 */
+        h1 {
+            font-size: 2.25rem; 
+            line-height: 1.25;
+            letter-spacing: 0.01em;
+            margin-top: 3.375rem; 
+            margin-bottom: 1.25rem; 
+        }
+        /* H2: ~56px, 行高 1.3 */
+        h2 {
+            font-size: 1.75rem;
+            line-height: 1.3;
+            letter-spacing: 0.02em;
+            margin-top: 3rem; 
+            margin-bottom: 1rem; 
+        }
+        /* H3: ~48px, 行高 1.4 */
+        h3 {
+            font-size: 1.5rem; 
+            line-height: 1.4;
+            letter-spacing: 0.02em;
+            margin-top: 2.75rem; 
+            margin-bottom: 0.875rem; 
+        }
+        /* H4: ~40px, 行高 1.5 */
+        h4 {
+            font-size: 1.25rem; 
+            line-height: 1.5;
+            letter-spacing: 0.03em;
+            margin-top: 2.5rem; 
+            margin-bottom: 0.75rem; 
+        }
+        /* H5: ~36px, 行高 1.5 */
+        h5 {
+            font-size: 1.125rem; 
+            line-height: 1.5;
+            letter-spacing: 0.04em;
+            margin-top: 2.5rem; 
+            margin-bottom: 0.75rem;
+        }
+
+        /* 段落 */
+        p {
+            margin-bottom: var(--p-spacing);
+        }
+        /* 避免紧跟标题的第一个段落过远，因为标题自身已含有 marginBottom */
+        h1+p, h2+p, h3+p, h4+p, h5+p {
+            margin-top: 0;
+        }
+
+        /* 引用块 */
+        blockquote {
+            margin: var(--p-spacing) 0;
+            padding: 1.2rem 1.8rem;
+            border-left: 8px solid var(--border-color);
+            background-color: rgba(0,0,0,0.03); /* 利用轻微的全局透明黑/白叠加，适配任意主背景 */
+            color: var(--text-sub);
+            border-radius: 0 12px 12px 0;
+        }
+        blockquote p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* 列表 */
+        ul, ol {
+            margin-bottom: var(--p-spacing);
+            padding-left: 2rem;
+            color: var(--text-main);
+        }
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* 分割线 */
+        hr {
+            border: none;
+            border-top: 3px dashed var(--border-color);
+            margin: 4rem 0;
+            opacity: 0.6;
+        }
+        
+        /* 代码块 */
+        pre {
+            background-color: #1a1a1a;
+            color: #f8f8f8;
+            padding: 1.5rem;
+            border-radius: 12px;
+            overflow-x: auto;
+            margin: var(--p-spacing) 0;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        }
+        code {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            background-color: rgba(0,0,0,0.06);
+            color: var(--text-sub);
+            padding: 0.2em 0.4em;
+            border-radius: 6px;
+            font-size: 0.9em;
+        }
+        pre code {
+            background-color: transparent;
+            color: inherit;
+            padding: 0;
+            border-radius: 0;
+        }
+        html[lang="ja"] pre, html[lang="en"] pre {
+            font-size: 0.9rem; /* 英文/日文字号较小，代码字体放大一点点 */
+        }
+        
+        /* 表格 */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: var(--p-spacing);
+        }
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 1rem;
+            text-align: left;
+        }
+        th {
+            background-color: rgba(0,0,0,0.03);
+            font-weight: 700;
+        }
+        
+        /* 针对可能包含图注的元素 */
+        figcaption {
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--text-sub);
+            margin-top: -1rem;
+            margin-bottom: var(--p-spacing);
+        }
+
+        /* 拓展功能支持：高亮标记 (Highlight) */
+        mark {
+            background-color: rgba(255, 215, 0, 0.3); /* 柔和的高亮黄，暗黑或亮白色系通用 */
+            color: inherit;
+            padding: 0.1em 0.3em;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        /* 拓展功能支持：上下标 */
+        sup, sub {
+            font-size: 0.7em;
+            line-height: 0;
+            position: relative;
+            vertical-align: baseline;
+            color: var(--text-sub);
+        }
+        sup { top: -0.5em; }
+        sub { bottom: -0.25em; }
+
+        /* 拓展功能支持：任务列表 (Checklist) */
+        .task-list-item {
+            list-style-type: none; /* 原生去黑点 */
+            display: flex;
+            align-items: flex-start; /* 完美对齐文字流 */
+        }
+        .task-list-item-checkbox {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 1.25em;
+            height: 1.25em;
+            margin-top: 0.3em;
+            margin-right: 0.8em;
+            border: 2px solid var(--border-color);
+            background-color: var(--bg-color);
+            border-radius: 6px; /* 介于方圆之间，兼顾两者的美感 */
+            position: relative;
+            flex-shrink: 0;
+            display: inline-block;
+        }
+        .task-list-item-checkbox:checked {
+            background-color: var(--text-main);
+            border-color: var(--text-main);
+        }
+        .task-list-item-checkbox:checked::after {
+            content: '';
+            position: absolute;
+            left: 32%;
+            top: 15%;
+            width: 25%;
+            height: 45%;
+            border: solid var(--bg-color);
+            border-width: 0 3px 3px 0; /* 对冲勾形底部的像素毛边 */
+            transform: rotate(45deg);
+        }
+
+        /* 拓展功能支持：后端直出的 Beautiful-Mermaid 矢量容器 */
+        .mermaid-container {
+            width: 100%;
+            margin: var(--p-spacing) 0;
+            display: flex;
+            justify-content: center;
+        }
+        .mermaid-container svg {
+            width: 100%;
+            height: auto;
+            max-width: 100%; /* 防止越界 */
+            /* 字体天生使用继承放大 */
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Markdown 转译的 HTML 将投递在此处 -->
+        {{CONTENT}}
+    </div>
+</body>
+</html>
